@@ -1,64 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-md mx-auto mt-10">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold mb-6 text-center">{{ __('Login') }}</h2>
+<div class="card">
+    <div class="card-header">
+        <h2>{{ __('Login') }}</h2>
+    </div>
+    <div class="card-body">
+        @if(session('status'))
+            <div class="alert alert-success mb-4">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-error mb-4">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div class="mb-4">
-                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
-                    {{ __('E-Mail Address') }}
-                </label>
-                <input type="email"
-                       name="email"
-                       id="email"
-                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                       value="{{ old('email') }}"
-                       required autofocus>
+            <div class="input-group mb-4">
+                <label for="email">{{ __('E-Mail Address') }}</label>
+                <input type="email" name="email" id="email" class="input" value="{{ old('email') }}" required autofocus>
                 @error('email')
-                    <span class="text-red-500 text-xs italic">{{ $message }}</span>
+                    <p class="text-sm text-danger-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">
-                    {{ __('Password') }}
-                </label>
-                <input type="password"
-                       name="password"
-                       id="password"
-                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                       required>
+            <div class="input-group mb-4">
+                <label for="password">{{ __('Password') }}</label>
+                <input type="password" name="password" id="password" class="input" required>
                 @error('password')
-                    <span class="text-red-500 text-xs italic">{{ $message }}</span>
+                    <p class="text-sm text-danger-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="flex items-center justify-between mb-4">
+            <div class="mb-4 flex items-center justify-between">
                 <div class="flex items-center">
                     <input type="checkbox" name="remember" id="remember" class="form-checkbox">
-                    <label for="remember" class="ml-2 text-sm text-gray-700">
-                        {{ __('Remember Me') }}
-                    </label>
+                    <label for="remember" class="ml-2 text-sm text-gray-500">{{ __('Remember Me') }}</label>
                 </div>
 
-                <a href="{{ route('password.request') }}" class="text-sm text-blue-500 hover:underline">
-                    {{ __('Forgot Your Password?') }}
-                </a>
+                <a href="{{ route('password.request') }}" class="text-sm text-blue-500 hover:underline">{{ __('Forgot Your Password?') }}</a>
             </div>
 
-            <div class="flex items-center justify-between">
-                <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    {{ __('Login') }}
-                </button>
-
-                <a class="text-sm text-blue-500 hover:underline" href="{{ route('register') }}">
-                    {{ __('Register') }} - {{ __('Need an account?') }}
-                </a>
+            <div class="mb-4">
+                <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
+                <a href="{{ route('register') }}" class="btn btn-outline">{{ __('Register') }} - {{ __('Need an account?') }}</a>
             </div>
         </form>
     </div>

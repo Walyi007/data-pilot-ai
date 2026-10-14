@@ -59,11 +59,20 @@
         </div>
         @endif
 
+        @if(session('ai_insight'))
+        <div class="mt-4">
+            <div class="alert alert-info">
+                {{ session('ai_insight') }}
+            </div>
+        </div>
+        @endif
+
         <div class="mt-4">
             <a href="{{ route('dataset.import') }}" class="btn btn-outline">{{ __('Import Another') }}</a>
             @if($dataset->status === 'processed' && $dataset->profile)
             <a href="{{ route('dataset.clean', $dataset) }}" class="btn btn-primary">{{ __('Clean Dataset') }}</a>
             <a href="{{ route('dataset.analytics', $dataset) }}" class="btn btn-outline">{{ __('Analytics Dashboard') }}</a>
+            <a href="{{ route('dataset.ai-insight', $dataset) }}" class="btn btn-outline">{{ __('AI Insight') }}</a>
             <div class="mt-3">
                 <button class="btn btn-outline" id="exportDropdownBtn" aria-haspopup="true" aria-expanded="false">
                     {{ __('Export Report') }}

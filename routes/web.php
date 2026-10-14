@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AiInsightController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -23,12 +24,31 @@ Route::get('/dataset/import', [DatasetImportController::class, 'create'])->name(
 Route::post('/dataset', [DatasetImportController::class, 'store'])->name('dataset.store');
 Route::get('/dataset/{dataset}', [DatasetImportController::class, 'show'])->name('dataset.show');
 
-// Dataset cleaning routes
+// Dataset listing route (for fallback)
+Route::get('/datasets', [DatasetImportController::class, 'index'])->name('datasets.index');
+
+// Dataset cleaning routes - fallback without dataset ID
+Route::get('/dataset/clean', function () {
+    return redirect()->route('datasets.index');
+});
+Route::post('/dataset/clean', function () {
+    return redirect()->route('datasets.index');
+})->name('dataset.clean.apply.fallback');
+
+// Dataset cleaning routes with dataset ID
 Route::get('/dataset/{dataset}/clean', [DatasetCleaningController::class, 'index'])->name('dataset.clean');
 Route::post('/dataset/{dataset}/clean', [DatasetCleaningController::class, 'apply'])->name('dataset.clean.apply');
 
-// Dataset analytics routes
+// Dataset analytics routes - fallback without dataset ID
+Route::get('/dataset/analytics', function () {
+    return redirect()->route('datasets.index');
+});
 Route::get('/dataset/{dataset}/analytics', [DatasetAnalyticsController::class, 'show'])->name('dataset.analytics');
+
+// Dataset AI insight route
+Route::get('/dataset/{dataset}/ai-insight', [AiInsightController::class, 'show'])
+    ->middleware('auth')
+    ->name('dataset.ai-insight');
 
 // Authentication routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

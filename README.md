@@ -1,6 +1,6 @@
 # DataPilot AI
 
-DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code permettant aux utilisateurs de télécharger, profiler, nettoyer et visualiser des jeux de données CSV et Excel.
+DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code permettant aux utilisateurs de télécharger, profiler, nettoyer et visualiser des jeux de données CSV et Excel, avec des insights générés par l'IA pour améliorer la compréhension des données.
 
 ## Fonctionnalités
 
@@ -9,6 +9,7 @@ DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code 
 - **Recommandations de nettoyage** : Suggestions basées sur le profil (valeurs vides, types mixtes, valeurs aberrantes)
 - **Nettoyage interactif** : Suppression des doublons, remplissage des valeurs manquantes, gestion des valeurs aberrantes, conversion de types, suppression des espaces blancs
 - **Tableau de bord analytique** : Graphiques et métriques pour explorer les données
+- **Insights générés par l'IA** : Explications en langage naturel de la qualité des données et recommandations de nettoyage personnalisées
 - **Génération de rapports** : Export PDF/Excel des profils, analytique et résultats de nettoyage
 - **Authentification complète** : Inscription, connexion, réinitialisation de mot de passe, gestion de profil
 - **Interface responsive** : Utilisable sur desktop et mobile
@@ -61,16 +62,28 @@ DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code 
      DB_PASSWORD=
      ```
 
-7. **Exécuter les migrations**
+7. **Configurer la clé API OpenAI (optionnel mais recommandé pour les insights IA)**
+   - Ajoutez votre clé API OpenAI dans le fichier `.env` :
+     ```
+     OPENAI_API_KEY=votre_clé_ici
+     ```
+   - Si la clé n'est pas fournie, le système utilisera une réponse de secours basée sur des règles.
+
+8. **Exécuter les migrations**
    ```bash
    php artisan migrate
    ```
 
-8. **Lancer le serveur de développement**
+9. **Lancer le serveur de développement**
    ```bash
    php artisan serve
    ```
    Puis visitez `http://127.0.0.1:8000` dans votre navigateur.
+
+10. **Lancer le serveur Vite pour les assets (optionnel, recommandé pour les mises à jour en temps réel)**
+    ```bash
+    npm run dev
+    ```
 
 ## Utilisation
 
@@ -93,6 +106,7 @@ DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code 
     - Nettoyer le jeu de données
     - Voir le tableau de bord analytique
     - Exporter des rapports (PDF/Excel)
+    - Obtenir un insight IA (nouveau)
 
 ### 4. Tableau de bord analytique
 - Cliquez sur "Analytics Dashboard" pour voir :
@@ -100,7 +114,14 @@ DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code 
   * Répartition des types de données (camembert)
   * Statistiques des colonnes numériques (min, max, moyenne, valeurs aberrantes)
 
-### 5. Nettoyage des données
+### 5. Insights générés par l'IA
+- Depuis la page de détails d'un jeu de données, cliquez sur le bouton **"AI Insight"**
+- Le système enverra les métriques de profil (score de qualité, colonnes avec valeurs manquantes, types de données, outliers, etc.) à un modèle d'IA (OpenAI GPT-3.5-turbo par défaut)
+- Vous recevrez une explication en langage naturel des problèmes de qualité des données et des recommandations de nettoyage personnalisées
+- L'insight apparaîtra sous forme d'alerte bleue sous les recommandations de nettoyage
+- Si aucune clé API OpenAI n'est configurée, une insight de secours basé sur des règles sera affiché
+
+### 6. Nettoyage des données
 - Cliquez sur "Clean Dataset" pour accéder au formulaire de nettoyage
 - Sélectionnez une ou plusieurs opérations :
   * Suppression des doublons
@@ -112,7 +133,7 @@ DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code 
 - Cliquez sur "Apply Cleaning" pour créer un nouveau jeu de données nettoyé
 - Vous êtes redirigé vers la page de détails du jeu de données nettoyé
 
-### 6. Export de rapports
+### 7. Export de rapports
 - Depuis la page de détails d'un jeu de données, cliquez sur le menu déroulant "Export Report"
 - Choisissez le type de rapport :
   * Profile Report (PDF/Excel)
@@ -120,14 +141,14 @@ DataPilot AI est une plateforme d'analyse et de nettoyage de données sans code 
   * Cleaning Report (PDF uniquement - nécessite un jeu de données nettoyé associé)
 - Le fichier sera téléchargé automatiquement
 
-### 7. Gestion du profil
+### 8. Gestion du profil
 - Cliquez sur votre nom dans la barre de navigation supérieure droite
 - Sélectionnez "Profile" pour modifier :
   * Nom
   * Email
   * Mot de passe (optionnel)
 
-### 8. Déconnexion
+### 9. Déconnexion
 - Cliquez sur votre nom dans la barre de navigation puis sur "Logout"
 
 ## Structure du projet
@@ -140,7 +161,8 @@ app/
 │  │  ├─ DatasetCleaningController.php   # Interface de nettoyage
 │  │  ├─ DatasetAnalyticsController.php  # Tableau de bord analytique
 │  │  ├─ Auth/                          # Contrôleurs d'authentification
-│  │  └─ ReportController.php           # Génération de rapports
+│  │  ├─ ReportController.php           # Génération de rapports
+│  │  └─ AiInsightController.php        # Insights générés par l'IA
 ├─ Models/
 │  ├─ Dataset.php                       # Modèle de jeu de données
 │  ├─ DatasetProfile.php                # Métriques et score de qualité
@@ -149,7 +171,8 @@ app/
 │  ├─ DatasetImportService.php          # Téléversement, validation, profilage
 │  ├─ DatasetCleaningRecommendationService.php # Génération de recommandations
 │  ├─ DatasetCleaningService.php        # Opérations de nettoyage
-│  └─ ReportGenerationService.php       # Génération PDF/Excel
+│  ├─ ReportGenerationService.php       # Génération PDF/Excel
+│  └─ AiInsightService.php              # Génération d'insights via IA
 ├─ database/
 │  ├─ migrations/                       # Schéma de la base de données
 │  └─ factories/                        # Factories de test

@@ -1,0 +1,1 @@
+<?php require __DIR__ . "/vendor/autoload.php"; $users = Illuminate\Support\Facades\DB::table("users")->get(); foreach($users as $u){ echo $u->id . " - " . $u->email . " - " . substr($u->password,0,10) . PHP_EOL; }

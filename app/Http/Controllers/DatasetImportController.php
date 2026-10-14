@@ -79,4 +79,17 @@ class DatasetImportController extends Controller
             'recommendations' => $recommendations,
         ]);
     }
+
+    /**
+     * Show a list of the user's datasets.
+     *
+     * @param  Request  $request
+     * @return View
+     */
+    public function index(Request $request): View
+    {
+        $datasets = Auth::user()->datasets()->orderBy('created_at', 'desc')->get();
+
+        return view('dataset.index', compact('datasets'));
+    }
 }
