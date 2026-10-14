@@ -89,7 +89,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label for="fill_column" class="form-label">{{ __('Column') }}</label>
-                                            <select id="fill_column" name="operations[1][column]" class="form-select">
+                                            <select id="fill_column" name="operations[1][column]" class="form-select w-64">
                                                 <option value="">{{ __('Select a column') }}</option>
                                                 @foreach($metrics as $columnName => $columnMetrics)
                                                 <option value="{{ $columnName }}" {{ $columnMetrics['empty_count'] > 0 ? 'selected' : '' }}>
@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="fill_method" class="form-label">{{ __('Method') }}</label>
-                                            <select id="fill_method" name="operations[1][method]" class="form-select">
+                                            <select id="fill_method" name="operations[1][method]" class="form-select w-64">
                                                 <option value="mean">{{ __('Mean (numeric columns)') }}</option>
                                                 <option value="median">{{ __('Median (numeric columns)') }}</option>
                                                 <option value="mode">{{ __('Mode') }}</option>
@@ -128,7 +128,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label for="outlier_column" class="form-label">{{ __('Column') }}</label>
-                                            <select id="outlier_column" name="operations[2][column]" class="form-select">
+                                            <select id="outlier_column" name="operations[2][column]" class="form-select w-64">
                                                 <option value="">{{ __('Select a column') }}</option>
                                                 @foreach($metrics as $columnName => $columnMetrics)
                                                 @if($columnMetrics['type'] == 'numeric' && isset($columnMetrics['outlier_count']) && $columnMetrics['outlier_count'] > 0)
@@ -141,7 +141,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="outlier_method" class="form-label">{{ __('Method') }}</label>
-                                            <select id="outlier_method" name="operations[2][method]" class="form-select">
+                                            <select id="outlier_method" name="operations[2][method]" class="form-select w-64">
                                                 <option value="winsorize">{{ __('Winsorize (cap to bounds)') }}</option>
                                                 <option value="remove">{{ __('Remove rows with outliers') }}</option>
                                                 <option value="cap">{{ __('Cap to bounds') }}</option>
@@ -166,7 +166,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label for="convert_column" class="form-label">{{ __('Column') }}</label>
-                                            <select id="convert_column" name="operations[3][column]" class="form-select">
+                                            <select id="convert_column" name="operations[3][column]" class="form-select w-64">
                                                 <option value="">{{ __('Select a column') }}</option>
                                                 @foreach($metrics as $columnName => $columnMetrics)
                                                 @if($columnMetrics['type'] == 'mixed')
@@ -179,7 +179,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="convert_target_type" class="form-label">{{ __('Target Type') }}</label>
-                                            <select id="convert_target_type" name="operations[3][target_type]" class="form-select">
+                                            <select id="convert_target_type" name="operations[3][target_type]" class="form-select w-64">
                                                 <option value="string">{{ __('String') }}</option>
                                                 <option value="numeric">{{ __('Numeric') }}</option>
                                                 <option value="date">{{ __('Date') }}</option>
@@ -204,7 +204,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="trim_columns" class="form-label">{{ __('Columns (leave empty for all)') }}</label>
-                                            <select id="trim_columns" name="operations[4][columns][]" class="form-select" multiple size="5">
+                                            <select id="trim_columns" name="operations[4][columns][]" class="form-select w-64" multiple size="5">
                                                 @foreach($metrics as $columnName => $columnMetrics)
                                                 <option value="{{ $columnName }}">{{ $columnName }}</option>
                                                 @endforeach

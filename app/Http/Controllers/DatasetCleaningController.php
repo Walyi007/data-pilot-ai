@@ -59,12 +59,12 @@ class DatasetCleaningController extends Controller
         // Validate the request
         $validated = $request->validate([
             'operations' => 'required|array',
-            'operations.*.type' => 'required|string|in:remove_duplicates,fill_missing,remove_outliers,convert_mixed_type,trim_whitespace',
-            'operations.*.column' => 'sometimes|required|string',
-            'operations.*.method' => 'sometimes|string',
-            'operations.*.value' => 'sometimes|string',
-            'operations.*.target_type' => 'sometimes|string|in:string,numeric,date',
-            'operations.*.columns' => 'sometimes|array',
+            'operations.*.type' => 'sometimes|required|string|in:remove_duplicates,fill_missing,remove_outliers,convert_mixed_type,trim_whitespace',
+            'operations.*.column' => 'sometimes|required_if:operations.*.type,fill_missing,remove_outliers|string',
+            'operations.*.method' => 'sometimes|required_if:operations.*.type,fill_missing,remove_outliers|string',
+            'operations.*.value' => 'sometimes|required_if:operations.*.type,fill_missing,operations.*.method,custom|string',
+            'operations.*.target_type' => 'sometimes|required_if:operations.*.type,convert_mixed_type|string|in:string,numeric,date',
+            'operations.*.columns' => 'sometimes|required_if:operations.*.type,trim_whitespace|array',
             'operations.*.columns.*' => 'sometimes|string',
         ]);
 
