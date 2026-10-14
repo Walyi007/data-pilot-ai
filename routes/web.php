@@ -12,7 +12,10 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('dataset.import');
+    }
+    return redirect()->route('login');
 });
 
 // Dataset import routes
