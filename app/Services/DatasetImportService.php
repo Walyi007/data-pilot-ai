@@ -221,11 +221,24 @@ class DatasetImportService
                 'column_count' => $headerCount,
             ];
         } catch (CsvSyntaxError $e) {
-            // File is empty or has no header
-            return [
-                'row_count' => 0,
-                'column_count' => 0,
-            ];
+            // Fallback: treat file as having no header, count columns based on first row
+            try {
+                $csv = Reader::createFromPath($filePath, 'r');
+                $csv->setHeaderOffset(null); // no header
+                $records = $csv->getRecords();
+                $rows = iterator_to_array($records);
+                $rowCount = count($rows);
+                $columnCount = $rowCount > 0 ? count($rows[0]) : 0;
+                return [
+                    'row_count' => $rowCount,
+                    'column_count' => $columnCount,
+                ];
+            } catch (\Exception $ex) {
+                return [
+                    'row_count' => 0,
+                    'column_count' => 0,
+                ];
+            }
         }
     }
 
